@@ -18,14 +18,18 @@
 
 open Bool_types
 
-let simplify = function
+let rec simplify = function
   | Not (Not b) -> b
   | Not (True) -> False
   | Not (False) -> True
+  | And [] -> True
   | And (False :: lst) -> False
-  | And (True :: lst) -> And lst
-  | Or (False :: lst) -> Or lst
+  | And (True :: lst) -> simplify (And lst)
+  | And (oth :: lst) -> (match simplify (And lst) with And lst' -> And (oth :: lst') | True -> oth | False -> False | oth' -> And (oth :: oth' :: []))
+  | Or [] -> False
+  | Or (False :: lst) -> simplify (Or lst)
   | Or (True :: lst) -> True
+  | Or (oth :: lst) -> (match simplify (Or lst) with Or lst' -> Or (oth :: lst') | False -> oth | True -> True| oth' -> And (oth :: oth' :: []))
   | oth -> oth
 
 let parse_bool_ast_from_string s =
@@ -44,25 +48,13 @@ let parse_bool_ast_from_string s =
   in
   bool
 
-let (bool_lst) = ref []
-
-let rec dump = function
+let rec dump' = function
 | Atom x -> print_string ("\""^x^"\"")
-| Or lst -> let delim = ref '(' in List.iter (fun itm -> print_char !delim; dump itm; delim := '+') lst; print_char ')'
-| And lst -> let delim = ref '(' in List.iter (fun itm -> print_char !delim; dump itm; delim := '.') lst; print_char ')'
-| Not x -> print_char '('; dump x; print_string ")'"
+| Or lst -> let delim = ref '(' in List.iter (fun itm -> print_char !delim; dump' itm; delim := '+') lst; print_char ')'
+| And lst -> let delim = ref '(' in List.iter (fun itm -> print_char !delim; dump' itm; delim := '.') lst; print_char ')'
+| Not x -> print_char '('; dump' x; print_string ")'"
 | True -> print_string "1"
 | False -> print_string "0"
 | Undecidable -> print_string "?"
 
-let dump x = dump (simplify x); print_newline()
-
-let parse_bool_ast () =
- try while true do
-  let linbuf = input_line stdin in
-  let rslt = parse_bool_ast_from_string linbuf in
-  dump rslt;
-  bool_lst := rslt :: !bool_lst
- done with End_of_file -> ()
-
-let _ = for i = 1 to (Array.length Sys.argv - 1) do let rslt = parse_bool_ast_from_string Sys.argv.(i) in dump rslt; bool_lst := rslt :: !bool_lst; done
+let dump f x = dump' (f x); print_newline()

@@ -18,13 +18,19 @@
 
 .PHONY: everything
 
-everything: boolparser.top boolparser
+everything: boolparser.top boolparser sopparser.top sopparser
 
-boolparser.top: bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml
-	ocamlmktop -g -o $@ bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml
+boolparser.top: bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml boolmain.ml
+	ocamlmktop -g -o $@ bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml boolmain.ml
 
-boolparser: bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml
-	ocamlopt -g -o $@ bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml
+boolparser: bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml boolmain.ml
+	ocamlopt -g -o $@ bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml boolmain.ml
+
+sopparser.top: bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml sopmain.ml
+	ocamlmktop -g -o $@ bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml sopmain.ml
+
+sopparser: bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml sopmain.ml
+	ocamlopt -g -o $@ bool_types.mli bool_parser.mli ord.ml bool_parser.ml bool_lexer.ml bool.ml sopmain.ml
 
 bool_lexer.ml: bool_lexer.mll
 	ocamllex bool_lexer.mll

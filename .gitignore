@@ -9,3 +9,5 @@ bool_parser.ml
 bool_parser.mli
 boolparser
 boolparser.top
+sopparser
+sopparser.top

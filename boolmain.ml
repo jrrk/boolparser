@@ -18,7 +18,18 @@
 
 open Bool_types
 open Bool
-open Boolmain
-open Sopmain
 
-let rslt = parse_bool_ast_from_string "(a+b).(c+d)";;
+let (bool_lst) = ref []
+
+let parse_bool_ast () =
+ try while true do
+  print_string ("Simplify: "); flush stdout;
+  let linbuf = input_line stdin in
+  let rslt = parse_bool_ast_from_string linbuf in
+  dump simplify rslt;
+  bool_lst := rslt :: !bool_lst
+ done with End_of_file -> ()
+
+let _ = let args = Array.length Sys.argv - 1 in
+        if args = 0 then parse_bool_ast ()
+        else for i = 1 to args do let rslt = parse_bool_ast_from_string Sys.argv.(i) in dump simplify rslt; bool_lst := rslt :: !bool_lst; done
