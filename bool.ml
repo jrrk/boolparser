@@ -50,7 +50,7 @@ let parse_bool_ast_from_string s =
 
 let rec dump' = function
 | Atom x -> print_string ("\""^x^"\"")
-| Or lst -> let delim = ref '(' in List.iter (fun itm -> print_char !delim; dump' itm; delim := '+') lst; print_char ')'
+| Or lst -> let delim = ref "(" in List.iter (fun itm -> print_string !delim; dump' itm; delim := "+\n") lst; print_char ')'
 | And lst -> let delim = ref '(' in List.iter (fun itm -> print_char !delim; dump' itm; delim := '.') lst; print_char ')'
 | Not x -> print_char '('; dump' x; print_string ")'"
 | True -> print_string "1"
