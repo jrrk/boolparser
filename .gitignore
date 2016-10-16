@@ -1,0 +1,11 @@
+*~
+*.cmi
+*.cmo
+*.cmx
+*.o
+ord.ml
+bool_lexer.ml
+bool_parser.ml
+bool_parser.mli
+boolparser
+boolparser.top
