@@ -61,7 +61,7 @@ let gensop rslt =
   bmap print_tab rslt;
   let ortab = ref [] in
   bmap (sop_tab ortab) rslt;
-  let sop = Or !ortab in
+  let sop = Or (List.rev !ortab) in
   sop_lst := sop :: !sop_lst;
   dump' sop
 
