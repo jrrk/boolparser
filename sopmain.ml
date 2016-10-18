@@ -63,7 +63,8 @@ let gensop rslt =
   bmap (sop_tab ortab) rslt;
   let sop = Or (List.rev !ortab) in
   sop_lst := sop :: !sop_lst;
-  dump' sop
+  dump' sop;
+  print_newline()
 
 let parse_bool_ast () =
  try while true do

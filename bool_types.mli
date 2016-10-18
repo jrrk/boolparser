@@ -3,5 +3,6 @@ type ('a)formula = False
                  | True
                  | Atom of 'a
                  | Not of ('a)formula
+                 | Bracket of ('a)formula
                  | And of ('a)formula list
                  | Or of ('a)formula list
